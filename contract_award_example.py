@@ -1,10 +1,10 @@
 import os
 import json
 
-from tender_impulse_client import TenderImpulseClient
+from tender_impulse_contract_award_client import TenderImpulseContractAwardClient
 
-# Local folder where tender documents will be stored.
-store_path = "tender-documents"
+# Local folder where contract award documents will be stored.
+store_path = "contract-award-documents"
 
 # Access token provided by Tender Impulse.
 access_token = "your_access_token"
@@ -13,12 +13,12 @@ access_token = "your_access_token"
 key = "your_encryption_key"
 
 # File where the last fetch id is stored between runs.
-state_file = os.path.abspath("tender-state.json")
+state_file = os.path.abspath("contract-award-state.json")
 
 # Fetch id to start from the very first time this example is run.
-initial_last_id = 6771840
+initial_last_id = 261374
 
-client = TenderImpulseClient(
+client = TenderImpulseContractAwardClient(
     store_path,
     access_token,
     key
@@ -48,15 +48,15 @@ last_id = read_last_id()
 
 print(f"Last Id: {last_id}")
 
-result = client.get_tenders(last_id)
+result = client.get_contract_awards(last_id)
 
 if result["status"] == "success":
 
-    print(f"Tenders Fetched: {len(result['tenders'])}")
+    print(f"Contract Awards Fetched: {len(result['contracts'])}")
 
     print(f"Last Fetch Id: {result['last_fetch_id']}")
 
-    print(result["tenders"])
+    print(result["contracts"])
 
     # Store the fetch id only after the batch has been handled,
     # so nothing is skipped if the run fails midway.
