@@ -16,7 +16,7 @@ key = "your_encryption_key"
 state_file = os.path.abspath("contract-award-state.json")
 
 # Fetch id to start from the very first time this example is run.
-initial_last_id = 261374
+initial_last_id = 261375
 
 client = TenderImpulseContractAwardClient(
     store_path,

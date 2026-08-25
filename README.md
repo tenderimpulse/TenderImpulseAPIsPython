@@ -1,6 +1,6 @@
 # Tender Impulse API Python
 
-Python example code demonstrating how to integrate with Tender Impulse APIs to retrieve global tender notices and contract awards, process encrypted API responses, validate data integrity, and download associated documents.
+Python example code demonstrating how to integrate with Tender Impulse APIs to retrieve global tender notices, contract awards, and tender news, process encrypted API responses, validate data integrity, and download associated documents.
 
 Tender Impulse provides access to over **20,000 global tenders daily**, helping organizations discover procurement opportunities from government agencies, public sector organizations, and international institutions worldwide.
 
@@ -24,6 +24,7 @@ pip install requests pycryptodome
 
 * Retrieve global tender notices
 * Retrieve contract awards
+* Retrieve tender news articles
 * Fetch id tracking so each run resumes where the last one stopped
 * Download tender and contract award documents
 * Secure API authentication using access tokens
@@ -33,7 +34,7 @@ pip install requests pycryptodome
 
 ## How the APIs Work
 
-Both APIs return records in batches, and you page through them using an id rather than a date. Each call takes a `lastid` and returns the records that come after it, along with a `fetchid` — the id of the last record in that batch. The `fetchid` is what you pass as the `lastid` of your next call.
+All three APIs work the same way: they return records in batches, and you page through them using an id rather than a date. Each call takes a `lastid` and returns the records that come after it, along with a `fetchid` — the id of the last record in that batch. The `fetchid` is what you pass as the `lastid` of your next call.
 
 The full cycle is:
 
@@ -77,6 +78,16 @@ Configure the same credentials in `contract_award_example.py`, then run:
 python contract_award_example.py
 ```
 
+### Tender News
+
+Configure the same credentials in `tender_news_example.py`, then run:
+
+```bash
+python tender_news_example.py
+```
+
+Tender news articles have no attachments, so this client does not download anything and takes no store path — only the access token and key.
+
 ### Fetch Id Storage
 
 Each example makes a single call and then stores the returned `fetchid` in a small JSON file next to the code, so the next run picks up from there. The examples deliberately do not loop — repeating the call is left to you, so the flow stays easy to read:
@@ -85,12 +96,13 @@ Each example makes a single call and then stores the returned `fetchid` in a sma
 | --- | --- |
 | `example.py` | `tender-state.json` |
 | `contract_award_example.py` | `contract-award-state.json` |
+| `tender_news_example.py` | `tender-news-state.json` |
 
 The file looks like this:
 
 ```json
 {
-  "fetchid": 6771840
+  "fetchid": 8156394
 }
 ```
 
@@ -110,7 +122,7 @@ The tender client returns a standardized response dictionary:
 {
     "status": "success",
     "tenders": [...],
-    "last_fetch_id": 1234567
+    "last_fetch_id": 8156394
 }
 ```
 
@@ -120,7 +132,17 @@ The contract award client returns the same shape, with the records under `contra
 {
     "status": "success",
     "contracts": [...],
-    "last_fetch_id": 261374
+    "last_fetch_id": 261375
+}
+```
+
+The tender news client returns the same shape, with the records under `tender_news`:
+
+```python
+{
+    "status": "success",
+    "tender_news": [...],
+    "last_fetch_id": 18016
 }
 ```
 
